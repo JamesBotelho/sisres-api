@@ -2,6 +2,7 @@ package br.com.jmsdevel.sisresapi.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Usuario implements UserDetails {
 	@OneToMany(mappedBy = "usuario")
 	private List<Reserva> reservas;
 	@ManyToMany
-	private List<Perfil> perfis;
+	private List<Perfil> perfis = new ArrayList<>();
 	
 	public Usuario() {}
 	

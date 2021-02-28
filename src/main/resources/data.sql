@@ -1,0 +1,1 @@
+INSERT INTO USUARIO(username, senha, nome, email, telefone, data_nascimento) VALUES ('admin', '$2a$10$BQpx02WT/T27yW4hXj4IUeMxVfBLfQdeiJKdOC8/1dtW.8h5XtGgC', 'Admin', 'admin@email.com', '83999154081', '1990-01-01');

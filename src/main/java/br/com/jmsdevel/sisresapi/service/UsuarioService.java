@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -57,7 +58,7 @@ public class UsuarioService implements UsuarioInterfaceService<UsuarioDto> {
 		Usuario usuarioEntity = new Usuario(usuario, formatter);
 		
 		if (usuario instanceof UsuarioCadastroFormDto) {
-			usuarioEntity.setSenha(((UsuarioCadastroFormDto) usuario).getSenha());
+			usuarioEntity.setSenha(new BCryptPasswordEncoder().encode(((UsuarioCadastroFormDto) usuario).getSenha()));
 		}
 		
 		usuarioEntity = usuarioRepository.save(usuarioEntity);
