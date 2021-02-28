@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.jmsdevel.sisresapi.dto.UsuarioDto;
+import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 
 @Entity
 public class Usuario implements UserDetails {

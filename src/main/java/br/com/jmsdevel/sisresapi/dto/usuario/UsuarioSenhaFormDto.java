@@ -1,17 +1,11 @@
-package br.com.jmsdevel.sisresapi.dto;
+package br.com.jmsdevel.sisresapi.dto.usuario;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 public class UsuarioSenhaFormDto extends UsuarioDto {
 	
-	@Min(8)
-	@Max(20)
 	@NotBlank
 	private String senhaAntiga;
-	@Min(8)
-	@Max(20)
 	@NotBlank
 	private String novaSenha;
 	

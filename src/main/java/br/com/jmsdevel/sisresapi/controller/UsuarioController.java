@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.jmsdevel.sisresapi.dto.UsuarioCadastroFormDto;
-import br.com.jmsdevel.sisresapi.dto.UsuarioDto;
+import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioCadastroFormDto;
+import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 import br.com.jmsdevel.sisresapi.interfaces.service.UsuarioInterfaceService;
 
 @RestController

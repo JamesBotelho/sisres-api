@@ -1,4 +1,4 @@
-package br.com.jmsdevel.sisresapi.dto;
+package br.com.jmsdevel.sisresapi.dto.usuario;
 
 import java.time.format.DateTimeFormatter;
 

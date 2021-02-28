@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.jmsdevel.sisresapi.dto.UsuarioDto;
-import br.com.jmsdevel.sisresapi.dto.UsuarioCadastroFormDto;
+import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioCadastroFormDto;
+import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 import br.com.jmsdevel.sisresapi.exception.RecursoNaoEncontrado;
 import br.com.jmsdevel.sisresapi.interfaces.service.UsuarioInterfaceService;
 import br.com.jmsdevel.sisresapi.model.Usuario;
