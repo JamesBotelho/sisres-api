@@ -1,6 +1,7 @@
 package br.com.jmsdevel.sisresapi.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import br.com.jmsdevel.sisresapi.dto.reserva.ReservaDto;
 
 @Entity
 public class Reserva {
@@ -25,6 +28,13 @@ public class Reserva {
 	private Usuario usuario;
 	
 	public Reserva() {}
+	
+	public Reserva(ReservaDto reservaDto, Usuario usuario, Sala sala, DateTimeFormatter formatter) {
+		this.inicio = LocalDateTime.parse(reservaDto.getData() + " " + reservaDto.getHoraInicio(), formatter);
+		this.fim = LocalDateTime.parse(reservaDto.getData() + " " + reservaDto.getHoraFim(), formatter);
+		this.sala = sala;
+		this.usuario = usuario;
+	}
 
 	public Long getId() {
 		return id;
