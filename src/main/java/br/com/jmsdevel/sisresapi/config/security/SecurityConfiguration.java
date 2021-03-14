@@ -1,6 +1,5 @@
 package br.com.jmsdevel.sisresapi.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,16 +15,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import br.com.jmsdevel.sisresapi.service.AutenticacaoService;
 import br.com.jmsdevel.sisresapi.service.TokenService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private AutenticacaoService autenticacaoService;
-	
-	@Autowired
-	private TokenService tokenService;
+	private final AutenticacaoService autenticacaoService;
+	private final TokenService tokenService;
+	private final BCryptPasswordEncoder encoder;
 
 	@Override
 	@Bean
@@ -35,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(autenticacaoService).passwordEncoder(encoder);
 	}
 
 	@Override

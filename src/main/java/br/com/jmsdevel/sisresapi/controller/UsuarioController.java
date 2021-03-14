@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.jmsdevel.sisresapi.dto.usuario.AtualizaSenhaUsuarioDto;
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioCadastroFormDto;
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 import br.com.jmsdevel.sisresapi.interfaces.service.UsuarioInterfaceService;
@@ -48,9 +49,9 @@ public class UsuarioController {
 		return ResponseEntity.created(uri).body(usuarioInserido);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<UsuarioDto> atualizaUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioDto usuario) {
-		return ResponseEntity.ok(usuarioService.atualizaUsuario(id, usuario));
+	@PutMapping("/mudarsenha")
+	public ResponseEntity<UsuarioDto> atualizaUsuario(@Valid @RequestBody AtualizaSenhaUsuarioDto usuario) {
+		return ResponseEntity.ok(usuarioService.atualizaSenhaUsuario(usuario));
 	}
 	
 	@DeleteMapping("/{id}")
