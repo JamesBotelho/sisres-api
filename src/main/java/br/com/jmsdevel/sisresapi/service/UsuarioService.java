@@ -1,32 +1,26 @@
 package br.com.jmsdevel.sisresapi.service;
 
-import java.net.URI;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioCadastroFormDto;
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 import br.com.jmsdevel.sisresapi.exception.RecursoNaoEncontrado;
 import br.com.jmsdevel.sisresapi.interfaces.service.UsuarioInterfaceService;
+import br.com.jmsdevel.sisresapi.mappers.UsuarioMapper;
 import br.com.jmsdevel.sisresapi.model.Usuario;
 import br.com.jmsdevel.sisresapi.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
-@Qualifier("usuario")
 public class UsuarioService implements UsuarioInterfaceService<UsuarioDto> {
 	
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private final UsuarioRepository usuarioRepository;
+	private final UsuarioMapper usuarioMapper;
 	
 	private Usuario getUsuarioPorId(Long id) {
 		return usuarioRepository
@@ -35,41 +29,41 @@ public class UsuarioService implements UsuarioInterfaceService<UsuarioDto> {
 	}
 
 	@Override
-	public ResponseEntity<List<UsuarioDto>> todosUsuarios() {
+	public List<UsuarioDto> todosUsuarios() {
 		List<UsuarioDto> usuarios = usuarioRepository
 										.findAll()
 											.stream()
-												.map((u) -> new UsuarioDto(u, formatter))
+												.map(usuarioMapper::toDto)
 													.collect(Collectors.toList());
 		
-		return ResponseEntity.ok(usuarios);
+		return usuarios;
 	}
 
 	@Override
-	public ResponseEntity<UsuarioDto> usuarioPorId(Long id) {
+	public UsuarioDto usuarioPorId(Long id) {
 		
 		Usuario usuario = getUsuarioPorId(id);
 		
-		return ResponseEntity.ok(new UsuarioDto(usuario, formatter));
+		return usuarioMapper.toDto(usuario);
 	}
 
 	@Override
-	public ResponseEntity<UsuarioDto> insereUsuario(UsuarioDto usuario, UriComponentsBuilder uriBuilder) {
-		Usuario usuarioEntity = new Usuario(usuario, formatter);
+	public UsuarioDto insereUsuario(UsuarioDto usuario) {
 		
 		if (usuario instanceof UsuarioCadastroFormDto) {
+			Usuario usuarioEntity = usuarioMapper.fromDtoCadastroToEntity((UsuarioCadastroFormDto)usuario);
 			usuarioEntity.setSenha(new BCryptPasswordEncoder().encode(((UsuarioCadastroFormDto) usuario).getSenha()));
+			
+			usuarioEntity = usuarioRepository.save(usuarioEntity);
+			
+			return usuarioMapper.toDto(usuarioEntity);
 		}
 		
-		usuarioEntity = usuarioRepository.save(usuarioEntity);
-		
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuarioEntity.getId()).toUri();
-		
-		return ResponseEntity.created(uri).body(new UsuarioDto(usuarioEntity, formatter));
+		throw new RuntimeException("Erro ao cadastrar usuário");
 	}
 
 	@Override
-	public ResponseEntity<UsuarioDto> atualizaUsuario(Long id, UsuarioDto usuario) {
+	public UsuarioDto atualizaUsuario(Long id, UsuarioDto usuario) {
 		Usuario usuarioBanco = getUsuarioPorId(id);
 		
 		usuarioBanco.setEmail(usuario.getEmail());
@@ -77,7 +71,7 @@ public class UsuarioService implements UsuarioInterfaceService<UsuarioDto> {
 		
 		usuarioBanco = usuarioRepository.save(usuarioBanco);
 		
-		return ResponseEntity.ok(new UsuarioDto(usuarioBanco, formatter));
+		return usuarioMapper.toDto(usuarioBanco);
 	}
 
 	@Override

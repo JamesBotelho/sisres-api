@@ -1,11 +1,10 @@
 package br.com.jmsdevel.sisresapi.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,33 +19,38 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioCadastroFormDto;
 import br.com.jmsdevel.sisresapi.dto.usuario.UsuarioDto;
 import br.com.jmsdevel.sisresapi.interfaces.service.UsuarioInterfaceService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
 	
-	@Autowired
-	@Qualifier("usuario")
-	private UsuarioInterfaceService<UsuarioDto> usuarioService;
+	private final UsuarioInterfaceService<UsuarioDto> usuarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<UsuarioDto>> listaTodosUsuarios() {
-		return usuarioService.todosUsuarios();
+		return ResponseEntity.ok(usuarioService.todosUsuarios());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDto> recuperaUsuarioPorId(@PathVariable Long id) {
-		return usuarioService.usuarioPorId(id);
+		return ResponseEntity.ok(usuarioService.usuarioPorId(id));
 	}
 	
 	@PostMapping
 	public ResponseEntity<UsuarioDto> insereUsuario(@Valid @RequestBody UsuarioCadastroFormDto usuario, UriComponentsBuilder uriBuilder) {
-		return usuarioService.insereUsuario(usuario, uriBuilder);
+		
+		UsuarioDto usuarioInserido = usuarioService.insereUsuario(usuario);
+		
+		URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuarioInserido.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(usuarioInserido);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioDto> atualizaUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioDto usuario) {
-		return usuarioService.atualizaUsuario(id, usuario);
+		return ResponseEntity.ok(usuarioService.atualizaUsuario(id, usuario));
 	}
 	
 	@DeleteMapping("/{id}")
