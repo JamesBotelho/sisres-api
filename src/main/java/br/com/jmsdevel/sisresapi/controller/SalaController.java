@@ -1,5 +1,6 @@
 package br.com.jmsdevel.sisresapi.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -30,22 +31,27 @@ public class SalaController {
 	
 	@GetMapping
 	public ResponseEntity<List<SalaDto>> buscaTodasSalas() {
-		return salaService.todasAsSalas();
+		return ResponseEntity.ok(salaService.todasAsSalas());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<SalaDto> buscaSalaPorId(@PathVariable Long id) {
-		return salaService.salaPorId(id);
+		return ResponseEntity.ok(salaService.salaPorId(id));
 	}
 	
 	@PostMapping
 	public ResponseEntity<SalaDto> insereSala(@Valid @RequestBody SalaDto salaDto, UriComponentsBuilder uriBuilder) {
-		return salaService.insereSala(salaDto, uriBuilder);
+		
+		SalaDto retorno = salaService.insereSala(salaDto);
+		
+		URI uri = uriBuilder.path("sala/{id}").buildAndExpand("id", retorno.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(salaService.insereSala(salaDto));
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<SalaDto> atualizaSala(@PathVariable Long id, @Valid @RequestBody SalaDto salaDto) {
-		return salaService.atualizaSala(id, salaDto);
+		return ResponseEntity.ok(salaService.atualizaSala(id, salaDto));
 	}
 	
 	@DeleteMapping("/{id}")

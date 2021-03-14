@@ -49,6 +49,44 @@ public class SalaDto {
 	public void setReservavel(Boolean reservavel) {
 		this.reservavel = reservavel;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((reservavel == null) ? 0 : reservavel.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SalaDto other = (SalaDto) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (reservavel == null) {
+			if (other.reservavel != null)
+				return false;
+		} else if (!reservavel.equals(other.reservavel))
+			return false;
+		return true;
+	}
+
 	
 	
 }
