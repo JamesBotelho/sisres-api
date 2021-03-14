@@ -9,8 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import br.com.jmsdevel.sisresapi.dto.sala.SalaDto;
+import lombok.Data;
 
+@Data
 @Entity
 public class Sala {
 	
@@ -23,45 +24,5 @@ public class Sala {
 	private Boolean reservavel;
 	@OneToMany(mappedBy = "sala")
 	private List<Reserva> reservas;
-	
-	public Sala() {}
-	
-	public Sala(SalaDto salaDto) {
-		this.nome = salaDto.getNome();
-		this.reservavel = salaDto.getReservavel();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Boolean getReservavel() {
-		return reservavel;
-	}
-
-	public void setReservavel(Boolean reservavel) {
-		this.reservavel = reservavel;
-	}
-
-	public List<Reserva> getReservas() {
-		return reservas;
-	}
-
-	public void setReservas(List<Reserva> reservas) {
-		this.reservas = reservas;
-	}
-	
 	
 }

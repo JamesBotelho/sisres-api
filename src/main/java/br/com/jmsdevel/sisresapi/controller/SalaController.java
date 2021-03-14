@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +18,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.jmsdevel.sisresapi.dto.sala.SalaDto;
 import br.com.jmsdevel.sisresapi.interfaces.service.SalaInterfaceService;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/sala")
 public class SalaController {
 	
-	@Autowired
-	@Qualifier("sala")
-	private SalaInterfaceService<SalaDto> salaService;
+	private final SalaInterfaceService<SalaDto> salaService;
 	
 	@GetMapping
 	public ResponseEntity<List<SalaDto>> buscaTodasSalas() {

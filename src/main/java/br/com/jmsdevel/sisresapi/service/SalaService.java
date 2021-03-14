@@ -3,22 +3,22 @@ package br.com.jmsdevel.sisresapi.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import br.com.jmsdevel.sisresapi.dto.sala.SalaDto;
 import br.com.jmsdevel.sisresapi.exception.RecursoNaoEncontrado;
 import br.com.jmsdevel.sisresapi.interfaces.service.SalaInterfaceService;
+import br.com.jmsdevel.sisresapi.mappers.SalaMapper;
 import br.com.jmsdevel.sisresapi.model.Sala;
 import br.com.jmsdevel.sisresapi.repository.SalaRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
-@Qualifier("sala")
 public class SalaService implements SalaInterfaceService<SalaDto> {
 	
-	@Autowired
-	private SalaRepository salaRepository;
+	private final SalaRepository salaRepository;
+	private final SalaMapper salaMapper;
 	
 	private Sala getPorId(Long id) {
 		return salaRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontrado("Sala não encontrada"));
@@ -29,7 +29,7 @@ public class SalaService implements SalaInterfaceService<SalaDto> {
 		List<SalaDto> salas = salaRepository
 								.findAll()
 									.stream()
-										.map((s) -> new SalaDto(s))
+										.map(salaMapper::toDto)
 											.collect(Collectors.toList());
 		return salas;
 	}
@@ -37,17 +37,17 @@ public class SalaService implements SalaInterfaceService<SalaDto> {
 	@Override
 	public SalaDto salaPorId(Long id) {
 		Sala s = getPorId(id);
-		return new SalaDto(s);
+		return salaMapper.toDto(s);
 	}
 
 	@Override
 	public SalaDto insereSala(SalaDto sala) {
 		
-		Sala salaEntity = new Sala(sala);
+		Sala salaEntity = salaMapper.toEntity(sala);
 		
 		salaEntity = salaRepository.save(salaEntity);
 		
-		return new SalaDto(salaEntity);
+		return salaMapper.toDto(salaEntity);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class SalaService implements SalaInterfaceService<SalaDto> {
 		
 		salaRepository.save(salaBanco);
 		
-		return new SalaDto(salaBanco);
+		return salaMapper.toDto(salaBanco);
 	}
 
 	@Override
